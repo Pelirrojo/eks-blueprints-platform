@@ -82,6 +82,29 @@ module "eks_blueprints" {
       manifests_dir = "./kubernetes/team-2048"
       users         = [data.aws_caller_identity.current.arn]
     }
+    team-ninja-nlb = {
+      "labels" = {
+        "appName"     = "2048-team-app",
+        "projectName" = "project-2048",
+        "environment" = "dev",
+        "domain"      = "example",
+        "uuid"        = "example",
+        "billingCode" = "example",
+        "branch"      = "example"
+      }
+      "quota" = {
+        "requests.cpu"    = "10",
+        "requests.memory" = "20Gi",
+        "limits.cpu"      = "30",
+        "limits.memory"   = "50Gi",
+        "pods"            = "15",
+        "secrets"         = "10",
+        "services"        = "10"
+      }
+      ## Manifests Example: we can specify a directory with kubernetes manifests that can be automatically applied in the team-2048 namespace.
+      manifests_dir = "./kubernetes/team-ninja-nlb"
+      users         = [data.aws_caller_identity.current.arn]
+    }
   }
 
 
@@ -172,6 +195,22 @@ module "kubernetes_addons" {
       {
         name  = "server.service.type"
         value = "LoadBalancer"
+      }
+    ]
+  }
+  
+  grafana_helm_config = {
+    name        = "grafana"
+    chart       = "grafana"
+    repository  = "https://grafana.github.io/helm-charts"
+    version     = "6.32.1"
+    namespace   = "grafana"
+    description = "Grafana Helm Chart deployment configuration"
+    values = [templatefile("${path.module}/values.yaml", {})]
+    set_sensitive = [
+      {
+        name  = "adminPassword"
+        value = "***********"
       }
     ]
   }

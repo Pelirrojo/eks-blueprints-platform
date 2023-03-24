@@ -13,11 +13,6 @@ output "platform_teams_configure_kubectl" {
   value       = try(module.eks_blueprints.teams[0].platform_teams_configure_kubectl["admin"], null)
 }
 
-output "application_teams_configure_kubectl" {
-  description = "Configure kubectl for each Application Teams: make sure you're logged in with the correct AWS CLI profile and run the following command to update your kubeconfig"
-  value       = try(module.eks_blueprints.teams[0].application_teams_configure_kubectl["team-riker"], null)
-}
-
 output "application_teams_configure_kubectl_2048" {
   description = "Configure kubectl for each Application Teams: make sure you're logged in with the correct AWS CLI profile and run the following command to update your kubeconfig"
   value       = try(module.eks_blueprints.teams[0].application_teams_configure_kubectl["team-2048"], null)
